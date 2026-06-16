@@ -7,6 +7,8 @@ import argparse
 import json
 from pathlib import Path
 
+from figure_layout import SHAPES, resolve_size
+
 
 def panel_id(index: int) -> str:
     letters = "abcdefghijklmnopqrstuvwxyz"
@@ -16,6 +18,7 @@ def panel_id(index: int) -> str:
 
 
 def build_contract(args: argparse.Namespace) -> dict:
+    size = resolve_size(args.shape, args.journal, args.panels, args.archetype, args.width_mm, args.height_mm)
     panels = []
     for i in range(args.panels):
         archetype = args.archetype[min(i, len(args.archetype) - 1)]
@@ -42,7 +45,9 @@ def build_contract(args: argparse.Namespace) -> dict:
             "mode": args.mode,
             "export_contract": {
                 "formats": args.formats,
-                "width_mm": args.width_mm,
+                "shape": size.shape,
+                "width_mm": size.width_mm,
+                "height_mm": size.height_mm,
                 "dpi": args.dpi,
                 "font": args.font,
                 "editable_text": True,
@@ -63,7 +68,9 @@ def main() -> None:
     parser.add_argument("--panels", type=int, default=1)
     parser.add_argument("--archetype", action="append", default=["quantitative-comparison"])
     parser.add_argument("--formats", nargs="+", default=["svg", "pdf", "png"])
-    parser.add_argument("--width-mm", type=float, default=183.0)
+    parser.add_argument("--shape", choices=SHAPES, default="auto")
+    parser.add_argument("--width-mm", type=float)
+    parser.add_argument("--height-mm", type=float)
     parser.add_argument("--dpi", type=int, default=300)
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--output", type=Path, default=Path("panel_contract.json"))

@@ -102,6 +102,8 @@ def main() -> None:
         f"- Mode: {figure.get('mode', 'unknown')}",
         f"- Intent: {figure.get('figure_intent', 'unknown')}",
         f"- Width: {export.get('width_mm', 'unknown')} mm",
+        f"- Height: {export.get('height_mm', config.get('height_mm', 'unknown'))} mm",
+        f"- Shape: {export.get('shape', config.get('shape', 'unknown'))}",
         f"- DPI target: {export.get('dpi', 'unknown')}",
         f"- Font: {export.get('font', 'unknown')}",
         f"- Resolved font: {config.get('actual_font', 'unknown')}",

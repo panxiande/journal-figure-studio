@@ -39,6 +39,7 @@ Before plotting, create a concise contract in prose or with `scripts/generate_pa
 - Core conclusion: one sentence the figure should support.
 - Evidence chain: how each panel supports the conclusion.
 - Target journal profile, figure type, width class, and mode.
+- Shape/aspect strategy: use `auto` unless the user specifies otherwise. For a single quantitative-comparison panel such as a bar, dot-plus-summary, box, or violin plot, prefer a tall single-column layout; reserve wide layouts for multi-panel rows, many groups, long labels, or explicitly wide journal compositions.
 - Archetype and intent for each panel.
 - Export contract: formats, size, dpi, fonts, source data, and editability.
 - Risk register: statistics, image integrity, resolution, color accessibility, caption/source-data risks.

@@ -9,6 +9,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from figure_layout import SHAPES, resolve_size
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
@@ -27,12 +29,14 @@ def main() -> int:
     parser.add_argument("--core-conclusion", default="")
     parser.add_argument("--panels", type=int, default=1)
     parser.add_argument("--archetype", action="append", default=["quantitative-comparison"])
-    parser.add_argument("--width-mm", type=float, default=89.0)
-    parser.add_argument("--height-mm", type=float, default=70.0)
+    parser.add_argument("--shape", choices=SHAPES, default="auto")
+    parser.add_argument("--width-mm", type=float)
+    parser.add_argument("--height-mm", type=float)
     parser.add_argument("--dpi", type=int, default=300)
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--formats", nargs="+", default=["svg", "pdf", "png", "tiff"])
     args = parser.parse_args()
+    size = resolve_size(args.shape, args.journal, args.panels, args.archetype, args.width_mm, args.height_mm)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     contract = args.output_dir / "panel_contract.json"
@@ -53,7 +57,11 @@ def main() -> int:
             "--panels",
             str(args.panels),
             "--width-mm",
-            str(args.width_mm),
+            str(size.width_mm),
+            "--height-mm",
+            str(size.height_mm),
+            "--shape",
+            size.shape,
             "--dpi",
             str(args.dpi),
             "--font",
@@ -72,9 +80,11 @@ def main() -> int:
         "--output-dir",
         str(args.output_dir),
         "--width-mm",
-        str(args.width_mm),
+        str(size.width_mm),
         "--height-mm",
-        str(args.height_mm),
+        str(size.height_mm),
+        "--shape",
+        size.shape,
         "--dpi",
         str(args.dpi),
         "--font",

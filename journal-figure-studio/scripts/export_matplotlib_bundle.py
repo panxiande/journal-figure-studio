@@ -25,6 +25,8 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
+from figure_layout import SHAPES
+
 
 def configure(font: str) -> None:
     mpl.rcParams.update(
@@ -99,6 +101,7 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, default=Path("figure_bundle"))
     parser.add_argument("--width-mm", type=float, default=89.0)
     parser.add_argument("--height-mm", type=float, default=70.0)
+    parser.add_argument("--shape", choices=SHAPES, default="auto")
     parser.add_argument("--dpi", type=int, default=300)
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--journal", default="general-publication")
@@ -133,6 +136,7 @@ def main() -> None:
         "journal_profile": args.journal,
         "width_mm": args.width_mm,
         "height_mm": args.height_mm,
+        "shape": args.shape,
         "dpi": args.dpi,
         "font": args.font,
         "actual_font": actual_font,
