@@ -13,6 +13,9 @@ figure:
   width_class: double-column
   export_contract:
     formats: [svg, pdf, png]
+    shape: auto
+    width_mm: 89
+    height_mm: 111
     dpi: 300
     editable_text: true
     source_data: requested

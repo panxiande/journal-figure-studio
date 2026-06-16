@@ -18,7 +18,7 @@ REQUIRED_FIGURE_FIELDS = {
     "export_contract",
 }
 
-REQUIRED_EXPORT_FIELDS = {"formats", "width_mm", "dpi", "font", "editable_text"}
+REQUIRED_EXPORT_FIELDS = {"formats", "shape", "width_mm", "height_mm", "dpi", "font", "editable_text"}
 
 REQUIRED_PANEL_FIELDS = {
     "id",
@@ -65,6 +65,11 @@ def validate_contract(contract: dict[str, Any]) -> list[str]:
             errors.append(f"figure.export_contract missing required fields: {', '.join(missing_export)}")
         if "formats" in export and not isinstance(export["formats"], list):
             errors.append("figure.export_contract.formats must be list")
+        if "shape" in export and export["shape"] not in {"auto", "tall", "wide", "square"}:
+            errors.append("figure.export_contract.shape must be one of: auto, tall, wide, square")
+        for number_field in ["width_mm", "height_mm", "dpi"]:
+            if number_field in export and not isinstance(export[number_field], (int, float)):
+                errors.append(f"figure.export_contract.{number_field} must be number")
 
     if not panels:
         errors.append("panels must contain at least one panel")

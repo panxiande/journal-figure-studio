@@ -55,6 +55,12 @@ def profile_checks(profile_name: str, export: dict[str, Any], config: dict[str, 
     dpi = float(export.get("dpi") or config.get("dpi") or 0)
     checks: list[str] = []
 
+    allowed_widths = rules.get("width_mm") or {}
+    if allowed_widths:
+        max_width = max(float(value) for value in allowed_widths.values())
+        width_status = "PASS" if width_mm <= max_width else "RISK"
+        checks.append(f"- Width <= profile maximum {max_width:g} mm: {width_status} ({width_mm:g} mm)")
+
     max_height = rules.get("max_height_mm")
     if max_height:
         checks.append(f"- Height <= {max_height} mm: {'PASS' if height_mm <= max_height else 'RISK'} ({height_mm:g} mm)")
@@ -94,6 +100,7 @@ def main() -> None:
     width_mm = float(export.get("width_mm") or config.get("width_mm") or 183)
     dpi = float(export.get("dpi") or config.get("dpi") or 300)
     profile_name = figure.get("journal_profile", "unknown")
+    formats = export.get("formats") or config.get("formats") or []
 
     lines = [
         "# Figure QA Report",
@@ -107,7 +114,7 @@ def main() -> None:
         f"- DPI target: {export.get('dpi', 'unknown')}",
         f"- Font: {export.get('font', 'unknown')}",
         f"- Resolved font: {config.get('actual_font', 'unknown')}",
-        f"- Formats: {', '.join(export.get('formats', [])) or 'unknown'}",
+        f"- Formats: {', '.join(formats) or 'unknown'}",
         "",
         "## Core Conclusion",
         "",

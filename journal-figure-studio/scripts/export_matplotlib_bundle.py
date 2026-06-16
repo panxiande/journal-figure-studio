@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
-from figure_layout import SHAPES
+from figure_layout import SHAPES, resolve_size
 
 
 def configure(font: str) -> None:
@@ -99,20 +99,24 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path)
     parser.add_argument("--output-dir", type=Path, default=Path("figure_bundle"))
-    parser.add_argument("--width-mm", type=float, default=89.0)
-    parser.add_argument("--height-mm", type=float, default=70.0)
+    parser.add_argument("--width-mm", type=float)
+    parser.add_argument("--height-mm", type=float)
     parser.add_argument("--shape", choices=SHAPES, default="auto")
+    parser.add_argument("--panels", type=int, default=1)
+    parser.add_argument("--archetype", action="append")
     parser.add_argument("--dpi", type=int, default=300)
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--journal", default="general-publication")
     parser.add_argument("--formats", nargs="+", default=["svg", "pdf", "png"])
     args = parser.parse_args()
+    archetypes = args.archetype or ["quantitative-comparison"]
+    size = resolve_size(args.shape, args.journal, args.panels, archetypes, args.width_mm, args.height_mm)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     configure(args.font)
     actual_font = resolved_font_name(args.font)
     df = load_data(args.data)
-    fig = draw_figure(df, args.width_mm, args.height_mm)
+    fig = draw_figure(df, size.width_mm, size.height_mm)
 
     formats = {item.lower().lstrip(".") for item in args.formats}
     if "svg" in formats:
@@ -134,9 +138,11 @@ def main() -> None:
     shutil.copyfile(Path(__file__), args.output_dir / "plot_script.py")
     config = {
         "journal_profile": args.journal,
-        "width_mm": args.width_mm,
-        "height_mm": args.height_mm,
-        "shape": args.shape,
+        "width_mm": size.width_mm,
+        "height_mm": size.height_mm,
+        "shape": size.shape,
+        "panels": args.panels,
+        "archetypes": archetypes,
         "dpi": args.dpi,
         "font": args.font,
         "actual_font": actual_font,

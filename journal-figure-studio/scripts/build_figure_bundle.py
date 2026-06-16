@@ -28,7 +28,7 @@ def main() -> int:
     parser.add_argument("--mode", choices=["draft", "revision", "submission"], default="draft")
     parser.add_argument("--core-conclusion", default="")
     parser.add_argument("--panels", type=int, default=1)
-    parser.add_argument("--archetype", action="append", default=["quantitative-comparison"])
+    parser.add_argument("--archetype", action="append")
     parser.add_argument("--shape", choices=SHAPES, default="auto")
     parser.add_argument("--width-mm", type=float)
     parser.add_argument("--height-mm", type=float)
@@ -36,7 +36,11 @@ def main() -> int:
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--formats", nargs="+", default=["svg", "pdf", "png", "tiff"])
     args = parser.parse_args()
-    size = resolve_size(args.shape, args.journal, args.panels, args.archetype, args.width_mm, args.height_mm)
+    archetypes = args.archetype or ["quantitative-comparison"]
+    archetype_args = []
+    for archetype in archetypes:
+        archetype_args.extend(["--archetype", archetype])
+    size = resolve_size(args.shape, args.journal, args.panels, archetypes, args.width_mm, args.height_mm)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     contract = args.output_dir / "panel_contract.json"
@@ -56,6 +60,7 @@ def main() -> int:
             args.core_conclusion,
             "--panels",
             str(args.panels),
+            *archetype_args,
             "--width-mm",
             str(size.width_mm),
             "--height-mm",
@@ -91,6 +96,7 @@ def main() -> int:
         args.font,
         "--journal",
         args.journal,
+        *archetype_args,
         "--formats",
         *args.formats,
     ]

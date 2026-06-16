@@ -66,7 +66,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=["draft", "revision", "submission"], default="draft")
     parser.add_argument("--core-conclusion", default="")
     parser.add_argument("--panels", type=int, default=1)
-    parser.add_argument("--archetype", action="append", default=["quantitative-comparison"])
+    parser.add_argument("--archetype", action="append")
     parser.add_argument("--formats", nargs="+", default=["svg", "pdf", "png"])
     parser.add_argument("--shape", choices=SHAPES, default="auto")
     parser.add_argument("--width-mm", type=float)
@@ -75,6 +75,7 @@ def main() -> None:
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--output", type=Path, default=Path("panel_contract.json"))
     args = parser.parse_args()
+    args.archetype = args.archetype or ["quantitative-comparison"]
 
     contract = build_contract(args)
     args.output.write_text(json.dumps(contract, indent=2), encoding="utf-8")
