@@ -1,0 +1,67 @@
+{
+  "general-publication": {
+    "width_mm": {
+      "single": 89,
+      "double": 183
+    },
+    "max_height_mm": 220,
+    "min_dpi": 300,
+    "font_candidates": ["Arial", "Helvetica", "DejaVu Sans"],
+    "preferred_formats": ["svg", "pdf", "png"],
+    "editable_text": true,
+    "notes": [
+      "Use when the target journal is unknown.",
+      "Verify exact submission rules before final upload."
+    ]
+  },
+  "nature": {
+    "width_mm": {
+      "single": 89,
+      "double": 183
+    },
+    "max_height_mm": 170,
+    "min_dpi": 300,
+    "font_candidates": ["Arial", "Helvetica"],
+    "preferred_formats": ["svg", "pdf", "png", "tiff"],
+    "editable_text": true,
+    "source_urls": [
+      "https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/",
+      "https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/"
+    ]
+  },
+  "plos": {
+    "width_mm": {
+      "single": 83,
+      "double": 171
+    },
+    "max_height_mm": 225,
+    "min_dpi": 300,
+    "font_candidates": ["Arial", "Helvetica", "DejaVu Sans"],
+    "preferred_formats": ["tiff", "eps", "pdf", "png"],
+    "editable_text": true,
+    "source_urls": ["https://journals.plos.org/plosone/s/figures"]
+  },
+  "jcb": {
+    "width_mm": {
+      "max": 177.8
+    },
+    "max_height_mm": 228.6,
+    "min_dpi": 300,
+    "font_candidates": ["Arial", "Helvetica"],
+    "preferred_formats": ["tiff", "pdf", "svg", "png"],
+    "editable_text": true,
+    "requires_scale_bars_for_image_panels": true,
+    "source_urls": ["https://rupress.org/jcb/pages/fig-vid-guidelines"]
+  },
+  "science": {
+    "width_mm": {},
+    "max_height_mm": null,
+    "min_dpi": 300,
+    "font_candidates": ["Arial", "Helvetica"],
+    "preferred_formats": ["svg", "pdf", "png", "tiff"],
+    "editable_text": true,
+    "notes": [
+      "Treat exact dimensions, formats, fonts, and article-type rules as unknown_or_verify."
+    ]
+  }
+}

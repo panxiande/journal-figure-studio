@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 from pathlib import Path
 
 os.environ.setdefault("MPLCONFIGDIR", str(Path.cwd() / ".matplotlib-cache"))
@@ -19,8 +20,10 @@ import matplotlib as mpl
 mpl.use("Agg")
 
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import numpy as np
 import pandas as pd
+from PIL import Image
 
 
 def configure(font: str) -> None:
@@ -36,6 +39,12 @@ def configure(font: str) -> None:
             "savefig.bbox": "tight",
         }
     )
+
+
+def resolved_font_name(font: str) -> str:
+    properties = font_manager.FontProperties(family=[font, "Arial", "Helvetica", "DejaVu Sans"])
+    path = font_manager.findfont(properties, fallback_to_default=True)
+    return font_manager.FontProperties(fname=path).get_name()
 
 
 def load_data(path: Path | None) -> pd.DataFrame:
@@ -73,6 +82,17 @@ def draw_figure(df: pd.DataFrame, width_mm: float, height_mm: float) -> plt.Figu
     return fig
 
 
+def flatten_alpha(path: Path, dpi: int) -> None:
+    if not path.exists():
+        return
+    with Image.open(path) as im:
+        if im.mode in {"RGBA", "LA"} or "transparency" in im.info:
+            background = Image.new("RGB", im.size, "white")
+            rgba = im.convert("RGBA")
+            background.paste(rgba, mask=rgba.getchannel("A"))
+            background.save(path, dpi=(dpi, dpi))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path)
@@ -82,25 +102,42 @@ def main() -> None:
     parser.add_argument("--dpi", type=int, default=300)
     parser.add_argument("--font", default="Arial")
     parser.add_argument("--journal", default="general-publication")
+    parser.add_argument("--formats", nargs="+", default=["svg", "pdf", "png"])
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     configure(args.font)
+    actual_font = resolved_font_name(args.font)
     df = load_data(args.data)
     fig = draw_figure(df, args.width_mm, args.height_mm)
 
-    fig.savefig(args.output_dir / "figure.svg")
-    fig.savefig(args.output_dir / "figure.pdf")
-    fig.savefig(args.output_dir / "figure_preview.png", dpi=args.dpi)
-    fig.savefig(args.output_dir / "figure.png", dpi=args.dpi)
+    formats = {item.lower().lstrip(".") for item in args.formats}
+    if "svg" in formats:
+        fig.savefig(args.output_dir / "figure.svg")
+    if "pdf" in formats:
+        fig.savefig(args.output_dir / "figure.pdf")
+    preview = args.output_dir / "figure_preview.png"
+    fig.savefig(preview, dpi=args.dpi, facecolor="white")
+    flatten_alpha(preview, args.dpi)
+    if "png" in formats:
+        png = args.output_dir / "figure.png"
+        fig.savefig(png, dpi=args.dpi, facecolor="white")
+        flatten_alpha(png, args.dpi)
+    if "tif" in formats or "tiff" in formats:
+        tiff = args.output_dir / "figure.tiff"
+        fig.savefig(tiff, dpi=args.dpi, facecolor="white")
+        flatten_alpha(tiff, args.dpi)
     df.to_csv(args.output_dir / "figure_source_data.csv", index=False)
+    shutil.copyfile(Path(__file__), args.output_dir / "plot_script.py")
     config = {
         "journal_profile": args.journal,
         "width_mm": args.width_mm,
         "height_mm": args.height_mm,
         "dpi": args.dpi,
         "font": args.font,
+        "actual_font": actual_font,
         "editable_text": True,
+        "formats": sorted(formats),
         "input_data": str(args.data) if args.data else "demo",
     }
     (args.output_dir / "plot_config.json").write_text(json.dumps(config, indent=2), encoding="utf-8")

@@ -35,3 +35,5 @@ Use this checklist for all modes. In draft mode, flag issues and proceed when th
 - Raster elements meet dpi expectations at final print size.
 - Colors are RGB/grayscale unless a profile requires otherwise.
 - Color encoding is accessible and does not rely only on red versus green.
+- Exported bundle contains the requested figure files, source data when available, plot config, panel contract, and QA report.
+- QA report records automated checks when possible: SVG text nodes, raster pixel size/effective dpi, resolved font, and profile-rule mismatches.

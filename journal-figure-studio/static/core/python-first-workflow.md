@@ -36,7 +36,7 @@ mpl.rcParams.update({
 
 ## Export Bundle
 
-Export at least:
+For a starter bundle, run `scripts/build_figure_bundle.py` and then adapt the generated plot script or exporter to the user's data. Export at least:
 
 - `figure.svg`
 - `figure.pdf`
@@ -46,6 +46,8 @@ Export at least:
 - `plot_config.yaml` or `.json`
 - `panel_contract.yaml` or `.json`
 - `figure_qa.md`
+
+Record the requested font and the resolved font used by Matplotlib. If Arial or Helvetica is unavailable and Matplotlib falls back to another family, mark this in QA rather than silently treating the requested font as satisfied.
 
 ## Fallbacks
 

@@ -15,7 +15,7 @@ Use this skill to turn data, sketches, existing figures, or review comments into
 2. Establish a figure contract before drawing or revising.
 3. Use Python to generate or inspect the figure, with explicit input paths, sizes, fonts, dpi, palettes, and random seeds.
 4. Export an editable/vector-first bundle where possible: SVG, PDF, TIFF or PNG, preview PNG, source data when available, plot script, config, panel contract, and QA report.
-5. Run QA appropriate to the mode: draft, revision, or submission.
+5. Run automated and human QA appropriate to the mode: draft, revision, or submission.
 
 ## Routing
 
@@ -58,6 +58,8 @@ mpl.rcParams["font.family"] = "Arial"
 
 Use `scripts/export_matplotlib_bundle.py` as a starter when a task needs a reproducible bundle. Adapt it to the user's data rather than hand-editing exported graphics.
 
+For a simple end-to-end starter bundle, prefer `scripts/build_figure_bundle.py`. It creates a panel contract, validates it, exports the figure files, and writes a QA report in one run.
+
 ## Existing Figure Diagnostics
 
 When auditing a supplied figure, inspect scientific logic, layout hierarchy, journal fit, plot-specific risks, integrity/statistics, and a panel-level action plan. Use this output shape:
@@ -85,7 +87,9 @@ Every completed figure task should include, when applicable:
 
 Use these utilities when helpful:
 
+- `scripts/build_figure_bundle.py`: create a starter contract, exported figure bundle, manifest, and QA report.
 - `scripts/generate_panel_contract.py`: create a starter contract JSON.
+- `scripts/validate_panel_contract.py`: validate required contract fields before plotting or delivery.
 - `scripts/generate_qa_report.py`: create a starter QA report from config and contract files.
 - `scripts/dpi_size_report.py`: inspect raster size and print-size dpi.
 - `scripts/check_svg_text.py`: detect whether SVG text remains editable.
@@ -99,3 +103,4 @@ Use these utilities when helpful:
 - Statistics and integrity: `references/statistics-legend.md`, `references/image-integrity.md`.
 - Color and chart patterns: `references/accessibility-palettes.md`, `references/chart-patterns.md`.
 - End-to-end examples: `references/python-workflow.md`.
+- Structured starter rules: `assets/templates/profile_rules.json`, `assets/templates/plot_config.json`.

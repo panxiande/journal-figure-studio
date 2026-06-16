@@ -49,3 +49,7 @@ Panels:
 - `a`: microscopy plate with channels and scale bar, `image-plate-quant`, visual evidence.
 - `b`: zoom crop, `image-plate-quant`, localization detail.
 - `c`: dot plus summary quantification, `quantitative-comparison`, measurement support.
+
+## Validation
+
+Use `scripts/validate_panel_contract.py panel_contract.json` before plotting or delivery. A valid contract must include the required figure/export fields and at least one panel with stable panel IDs, archetypes, data source notes, statistical notes, integrity notes, and risk fields.
