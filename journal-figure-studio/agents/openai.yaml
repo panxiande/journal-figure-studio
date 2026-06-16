@@ -1,0 +1,4 @@
+interface:
+  display_name: "Journal Figure Studio"
+  short_description: "Create and audit publication-ready scientific figures."
+  default_prompt: "Create a journal-ready scientific figure bundle from my data and target journal."

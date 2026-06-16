@@ -1,0 +1,12 @@
+{
+  "journal_profile": "general-publication",
+  "figure_intent": "discovery",
+  "mode": "draft",
+  "width_mm": 183,
+  "height_mm": 120,
+  "dpi": 300,
+  "font": "Arial",
+  "formats": ["svg", "pdf", "png"],
+  "editable_text": true,
+  "palette": "okabe-ito"
+}

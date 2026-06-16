@@ -1,0 +1,16 @@
+.DS_Store
+*/.DS_Store
+
+.matplotlib-cache/
+**/.matplotlib-cache/
+
+__pycache__/
+*.py[cod]
+
+.venv/
+venv/
+
+figure_bundle/
+*_bundle/
+panel_contract.json
+figure_qa.md
