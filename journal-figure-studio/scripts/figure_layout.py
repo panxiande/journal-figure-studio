@@ -10,7 +10,27 @@ from typing import Sequence
 SHAPES = ("auto", "tall", "wide", "square")
 
 TALL_ARCHETYPES = {"quantitative-comparison", "clinical-evidence"}
+TALL_ALIASES = {
+    "bar",
+    "bar-chart",
+    "bar chart",
+    "barplot",
+    "bar plot",
+    "grouped-bar",
+    "grouped bar",
+    "dot",
+    "dot-plot",
+    "dot plot",
+    "box",
+    "boxplot",
+    "box plot",
+    "violin",
+    "violin-plot",
+    "violin plot",
+    "raincloud",
+}
 SQUARE_ARCHETYPES = {"relationship-scatter", "matrix-heatmap", "omics-embedding"}
+SQUARE_ALIASES = {"scatter", "scatterplot", "scatter plot", "correlation", "heatmap", "umap", "tsne", "t-sne"}
 
 
 @dataclass(frozen=True)
@@ -25,9 +45,9 @@ def infer_shape(requested: str, panels: int, archetypes: Sequence[str]) -> str:
         return requested
     normalized = {item.strip().lower() for item in archetypes if item}
     if panels <= 1:
-        if normalized & TALL_ARCHETYPES:
+        if normalized & (TALL_ARCHETYPES | TALL_ALIASES):
             return "tall"
-        if normalized & SQUARE_ARCHETYPES:
+        if normalized & (SQUARE_ARCHETYPES | SQUARE_ALIASES):
             return "square"
     return "wide"
 
